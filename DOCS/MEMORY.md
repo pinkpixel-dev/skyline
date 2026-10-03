@@ -16,3 +16,9 @@
 
 **Decided:** The profile workflow force-pushes a single commit to an orphan `output` branch.
 **Why:** It keeps the profile repo's main branch free of nightly image commits, and needs no third-party actions.
+
+## October 3, 2026: Renamed to skyline, themes are built in
+
+**Decided:** The project is called `skyline` (was `neon-skyline`), and `neon` became the default theme out of 10 built-in palettes picked with `-theme`.
+**Why:** Once the city came in more than one color, "neon" described a single theme rather than the whole tool.
+**Rejected:** A JSON theme file option for now. Ten presets cover plenty of variety without making anyone hand-pick a dozen hex values.

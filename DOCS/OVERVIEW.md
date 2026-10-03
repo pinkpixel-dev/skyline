@@ -1,13 +1,17 @@
 # Overview
 
-neon-skyline is a small Go CLI that draws a GitHub contribution graph as a neon city, either in the terminal or as an animated SVG.
+skyline is a small Go CLI that draws a GitHub contribution graph as an ASCII city, either in the terminal or as an animated SVG, in one of 10 color themes.
 
 ## Flow
 
-1. `main.go` parses flags and grabs a token (`GITHUB_TOKEN`, `GH_TOKEN`, then `gh auth token`).
+1. `main.go` parses flags, resolves the theme with `render.ThemeByName`, and grabs a token (`GITHUB_TOKEN`, `GH_TOKEN`, then `gh auth token`).
 2. `internal/github` sends one GraphQL query for `contributionCalendar` and returns weeks of days, each with a count and a 0 to 4 level (mapped from GitHub's `contributionLevel` enum).
 3. `internal/city` builds a `Scene`: a 2D grid of `Cell`s. This is the only place that decides layout.
-4. `internal/render` turns the scene into ANSI (`ANSI`) or SVG (`SVG`). Both read colors from `palette.go`, so the two outputs match.
+4. `internal/render` turns the scene into ANSI (`ANSI(scene, theme)`) or SVG (`SVG(scene, theme)`). Both pick colors through the `Theme` they're given, so the two outputs match.
+
+## Themes (`internal/render/palette.go`)
+
+A `Theme` holds every color the city uses: sky, stars, roof, antenna, street, labels, text, two alternating building shades, and five window colors (dark, then GitHub levels 1 to 4). `Themes` is the ordered list of built-ins, and the first one (`neon`) is the default. Adding a theme just means adding an entry there; `palette_test.go` checks that every color is a valid hex value and that names are unique.
 
 ## Layout rules (`internal/city`)
 
@@ -26,9 +30,10 @@ Every glyph is its own `<text>` element at an explicit x position, so font width
 
 ## Profile automation
 
-`examples/profile-workflow.yml` runs nightly in a user's profile repo. It runs `go run github.com/pinkpixel-dev/neon-skyline@latest` and force-pushes `skyline.svg` to an orphan `output` branch. It uses `SKYLINE_TOKEN` when that secret exists and falls back to the workflow's `GITHUB_TOKEN`.
+`examples/profile-workflow.yml` runs nightly in a user's profile repo. It runs `go run github.com/pinkpixel-dev/skyline@latest -theme neon` and force-pushes `skyline.svg` to an orphan `output` branch. It uses `SKYLINE_TOKEN` when that secret exists and falls back to the workflow's `GITHUB_TOKEN`.
 
 ## Tests
 
 - `internal/city/city_test.go` covers heights, the antenna, window levels, the `-weeks` trim, month labels, and determinism.
+- `internal/render/palette_test.go` checks the theme list and `ThemeByName`.
 - `internal/render/svg_test.go` checks that the SVG parses as XML, including a login with characters that need escaping.

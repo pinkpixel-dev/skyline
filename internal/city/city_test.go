@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pinkpixel-dev/neon-skyline/internal/github"
+	"github.com/pinkpixel-dev/skyline/internal/github"
 )
 
 // calendar builds weeks starting on a Sunday, each day with the given counts.

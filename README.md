@@ -1,8 +1,8 @@
-# neon-skyline
+# skyline
 
-neon-skyline turns your GitHub contribution graph into a neon ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window.
+skyline turns your GitHub contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 10 color themes.
 
-![neon skyline preview](assets/preview.png)
+![skyline preview](assets/preview.png)
 
 It does two things:
 
@@ -13,8 +13,8 @@ It does two things:
 
 - **Buildings:** each building is one week. Its height follows that week's total contributions on a log scale, so one huge week doesn't flatten everything else into the street.
 - **Windows:** the windows cycle through that week's seven days, bottom to top. A day with no contributions leaves its window dark (`·`). A day with contributions lights it up (`▪`).
-- **Colors:** window colors follow GitHub's four intensity levels: dim magenta, hot pink, cyan, then almost white for your busiest days.
-- **Antenna:** your record week gets a little cyan antenna on the roof.
+- **Colors:** window colors follow GitHub's four intensity levels, getting brighter as the day gets busier. Each theme has its own set of four.
+- **Antenna:** your record week gets a little antenna on the roof.
 - **Labels:** month names sit under the street.
 
 Stars and flickering windows come from a fixed hash, so the city looks the same every time you run it with the same data.
@@ -22,26 +22,26 @@ Stars and flickering windows come from a fixed hash, so the city looks the same 
 ## Requirements
 
 - Go 1.25 or newer
-- A GitHub token. neon-skyline checks `GITHUB_TOKEN`, then `GH_TOKEN`, then falls back to `gh auth token`. If you already use the GitHub CLI, you don't need to do anything.
+- A GitHub token. skyline checks `GITHUB_TOKEN`, then `GH_TOKEN`, then falls back to `gh auth token`. If you already use the GitHub CLI, you don't need to do anything.
 
 ## Install
 
 ```bash
-go install github.com/pinkpixel-dev/neon-skyline@latest
+go install github.com/pinkpixel-dev/skyline@latest
 ```
 
 Or run it from a clone:
 
 ```bash
-git clone https://github.com/pinkpixel-dev/neon-skyline.git
-cd neon-skyline
+git clone https://github.com/pinkpixel-dev/skyline.git
+cd skyline
 go run . your-username
 ```
 
 ## Usage
 
 ```bash
-neon-skyline your-username
+skyline your-username
 ```
 
 Your terminal needs truecolor support to show the real palette. Lip Gloss downsamples the colors on terminals that don't have it.
@@ -49,19 +49,33 @@ Your terminal needs truecolor support to show the real palette. Lip Gloss downsa
 The full city is 106 columns wide. If your terminal is narrower, cut it down with `-weeks`:
 
 ```bash
-neon-skyline -weeks 30 your-username
+skyline -weeks 30 your-username
 ```
 
 To write an SVG instead of printing:
 
 ```bash
-neon-skyline -svg skyline.svg your-username
+skyline -svg skyline.svg your-username
 ```
+
+### Themes
+
+Pick a palette with `-theme`:
+
+```bash
+skyline -theme synthwave your-username
+```
+
+There are 10 of them: `neon` (the default), `synthwave`, `matrix`, `amber`, `ice`, `sunset`, `toxic`, `vapor`, `crimson` and `mono`. Run `skyline -themes` to see a color swatch for each one right in your terminal.
+
+![All 10 themes](assets/themes.png)
 
 ### Flags
 
 | Flag | Default | What it does |
 | --- | --- | --- |
+| `-theme` | `neon` | Color theme to use |
+| `-themes` | | List the built-in themes with a color swatch, then exit |
 | `-height` | `14` | Height of the tallest building, in rows |
 | `-weeks` | `53` | How many recent weeks to draw |
 | `-svg` | | Write an animated SVG to this path instead of printing to the terminal |
@@ -70,12 +84,13 @@ neon-skyline -svg skyline.svg your-username
 
 Your profile README lives in a repo named after your username (`github.com/you/you`). A small workflow can redraw the skyline every night and publish it to a separate `output` branch, so your main branch doesn't fill up with daily image commits.
 
-1. Copy [`examples/profile-workflow.yml`](examples/profile-workflow.yml) into your profile repo as `.github/workflows/neon-skyline.yml`.
-2. Commit it, then open the **Actions** tab and run **neon skyline** once by hand so the `output` branch exists.
-3. Add the image to your profile `README.md`:
+1. Copy [`examples/profile-workflow.yml`](examples/profile-workflow.yml) into your profile repo as `.github/workflows/skyline.yml`.
+2. If you want a theme other than `neon`, change `-theme neon` in the workflow's run line.
+3. Commit it, then open the **Actions** tab and run **skyline** once by hand so the `output` branch exists.
+4. Add the image to your profile `README.md`:
 
    ```markdown
-   ![My neon skyline](https://raw.githubusercontent.com/you/you/output/skyline.svg)
+   ![My skyline](https://raw.githubusercontent.com/you/you/output/skyline.svg)
    ```
 
 After that, it updates on its own every night.

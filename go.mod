@@ -1,4 +1,4 @@
-module github.com/pinkpixel-dev/neon-skyline
+module github.com/pinkpixel-dev/skyline
 
 go 1.25.0
 

@@ -1,7 +1,7 @@
 # Drop this into your profile repo (github.com/<you>/<you>) at
-# .github/workflows/neon-skyline.yml. It redraws the skyline every night and
+# .github/workflows/skyline.yml. It redraws the skyline every night and
 # publishes skyline.svg to an `output` branch so your main branch stays clean.
-name: neon skyline
+name: skyline
 
 on:
   schedule:
@@ -20,11 +20,13 @@ jobs:
           go-version: stable
 
       - name: Draw skyline
+        # Swap -theme for any of: neon, synthwave, matrix, amber, ice, sunset,
+        # toxic, vapor, crimson, mono
         env:
           # Optional: add a SKYLINE_TOKEN secret (classic PAT, read:user) to
           # include private contributions. Falls back to the workflow token.
           GITHUB_TOKEN: ${{ secrets.SKYLINE_TOKEN || secrets.GITHUB_TOKEN }}
-        run: go run github.com/pinkpixel-dev/neon-skyline@latest -svg skyline.svg "${{ github.repository_owner }}"
+        run: go run github.com/pinkpixel-dev/skyline@latest -theme neon -svg skyline.svg "${{ github.repository_owner }}"
 
       - name: Publish to output branch
         env:
@@ -35,5 +37,5 @@ jobs:
           git add skyline.svg
           git -c user.name="github-actions[bot]" \
               -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit -qm "Update neon skyline"
+              commit -qm "Update skyline"
           git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" output

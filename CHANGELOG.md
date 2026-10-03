@@ -4,8 +4,10 @@
 
 ### 🌃 Skyline
 
-- First release. Draws your GitHub contribution graph as a neon ASCII city in the terminal
+- First release. Draws your GitHub contribution graph as an ASCII city in the terminal
 - Building height follows weekly totals on a log scale, and window colors follow GitHub's four contribution levels
+- 10 color themes via `-theme`: neon, synthwave, matrix, amber, ice, sunset, toxic, vapor, crimson and mono
+- `-themes` lists every theme with a color swatch
 - The record week gets an antenna, and month labels run along the street
 - `-height` and `-weeks` flags control the size of the city
 

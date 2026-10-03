@@ -5,7 +5,7 @@ package city
 import (
 	"math"
 
-	"github.com/pinkpixel-dev/neon-skyline/internal/github"
+	"github.com/pinkpixel-dev/skyline/internal/github"
 )
 
 // Kind says what a cell is so renderers can pick colors.

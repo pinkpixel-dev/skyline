@@ -5,7 +5,7 @@ import (
 	"html"
 	"strings"
 
-	"github.com/pinkpixel-dev/neon-skyline/internal/city"
+	"github.com/pinkpixel-dev/skyline/internal/city"
 )
 
 const (
@@ -20,7 +20,7 @@ const (
 // SVG renders the scene as a standalone animated SVG, suitable for a GitHub
 // profile README. Each glyph is placed on an explicit grid so font metrics
 // can't drift columns apart; some lit windows flicker and bright stars twinkle.
-func SVG(s *city.Scene) string {
+func SVG(s *city.Scene, t Theme) string {
 	cols := 0
 	if len(s.Rows) > 0 {
 		cols = len(s.Rows[0])
@@ -30,7 +30,7 @@ func SVG(s *city.Scene) string {
 
 	var b strings.Builder
 	fmt.Fprintf(&b, `<svg xmlns="http://www.w3.org/2000/svg" width="%d" height="%d" viewBox="0 0 %d %d" role="img" aria-labelledby="t">`, w, h, w, h)
-	fmt.Fprintf(&b, `<title id="t">Neon skyline of @%s's GitHub contributions: %s in the last year</title>`,
+	fmt.Fprintf(&b, `<title id="t">Skyline of @%s's GitHub contributions: %s in the last year</title>`,
 		html.EscapeString(s.Login), commas(s.Total))
 	b.WriteString(`<style>
 text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:` + fmt.Sprint(fontSize) + `px;white-space:pre}
@@ -40,10 +40,10 @@ text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monosp
 @keyframes twinkle{0%,100%{opacity:1}50%{opacity:.3}}
 @media (prefers-reduced-motion:reduce){.f,.tw{animation:none}}
 </style>`)
-	fmt.Fprintf(&b, `<rect width="100%%" height="100%%" fill="%s" rx="8"/>`, colSky)
-	fmt.Fprintf(&b, `<text x="%d" y="28" fill="%s" font-weight="700">@%s</text>`, padX, colRoof, html.EscapeString(s.Login))
+	fmt.Fprintf(&b, `<rect width="100%%" height="100%%" fill="%s" rx="8"/>`, t.Sky)
+	fmt.Fprintf(&b, `<text x="%d" y="28" fill="%s" font-weight="700">@%s</text>`, padX, t.Roof, html.EscapeString(s.Login))
 	fmt.Fprintf(&b, `<text x="%d" y="28" fill="%s">%s contributions in the last year</text>`,
-		padX+(len(s.Login)+2)*cellW, colLabel, commas(s.Total))
+		padX+(len(s.Login)+2)*cellW, t.Label, commas(s.Total))
 
 	// Building backgrounds: one rect per horizontal run of the same shade.
 	for y, row := range s.Rows {
@@ -57,7 +57,7 @@ text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monosp
 				end++
 			}
 			fmt.Fprintf(&b, `<rect x="%d" y="%d" width="%d" height="%d" fill="%s"/>`,
-				padX+x*cellW, padTop+y*cellH, (end-x)*cellW, cellH, bg(row[x]))
+				padX+x*cellW, padTop+y*cellH, (end-x)*cellW, cellH, t.bg(row[x]))
 			x = end
 		}
 	}
@@ -77,7 +77,7 @@ text{font-family:ui-monospace,"SF Mono",Menlo,Consolas,"DejaVu Sans Mono",monosp
 				class = fmt.Sprintf(` class="tw" style="animation-delay:-%.1fs"`, float64((x*3+y*5)%40)/10)
 			}
 			fmt.Fprintf(&b, `<text x="%d" y="%d" fill="%s"%s>%s</text>`,
-				padX+x*cellW, baseline, fg(c), class, html.EscapeString(string(c.Rune)))
+				padX+x*cellW, baseline, t.fg(c), class, html.EscapeString(string(c.Rune)))
 		}
 	}
 

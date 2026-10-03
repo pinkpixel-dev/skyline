@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pinkpixel-dev/neon-skyline/internal/city"
-	"github.com/pinkpixel-dev/neon-skyline/internal/github"
+	"github.com/pinkpixel-dev/skyline/internal/city"
+	"github.com/pinkpixel-dev/skyline/internal/github"
 )
 
 func TestSVGIsWellFormed(t *testing.T) {
@@ -23,7 +23,7 @@ func TestSVGIsWellFormed(t *testing.T) {
 		cal.Weeks = append(cal.Weeks, week)
 	}
 
-	out := SVG(city.Build(cal, city.Options{Height: 8}))
+	out := SVG(city.Build(cal, city.Options{Height: 8}), Themes[0])
 
 	dec := xml.NewDecoder(strings.NewReader(out))
 	for {
