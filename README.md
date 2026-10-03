@@ -2,7 +2,7 @@
 
 skyline turns your GitHub contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 10 color themes.
 
-![skyline preview](assets/preview.png)
+![Skyline](https://raw.githubusercontent.com/sizzlebop/sizzlebop/output/skyline.svg)
 
 It does two things:
 
@@ -82,7 +82,7 @@ There are 10 of them: `neon` (the default), `synthwave`, `matrix`, `amber`, `ice
 
 ## Putting it on your GitHub profile
 
-Your profile README lives in a repo named after your username (`github.com/you/you`). A small workflow can redraw the skyline every night and publish it to a separate `output` branch, so your main branch doesn't fill up with daily image commits.
+Your profile README is in a repo named after your username (`github.com/you/you`). A small workflow can redraw the skyline every night and publish it to a separate `output` branch, so your main branch doesn't fill up with daily image commits.
 
 1. Copy [`examples/profile-workflow.yml`](examples/profile-workflow.yml) into your profile repo as `.github/workflows/skyline.yml`.
 2. If you want a theme other than `neon`, change `-theme neon` in the workflow's run line.
