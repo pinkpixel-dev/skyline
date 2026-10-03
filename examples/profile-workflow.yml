@@ -1,0 +1,39 @@
+# Drop this into your profile repo (github.com/<you>/<you>) at
+# .github/workflows/neon-skyline.yml. It redraws the skyline every night and
+# publishes skyline.svg to an `output` branch so your main branch stays clean.
+name: neon skyline
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  skyline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v7
+        with:
+          go-version: stable
+
+      - name: Draw skyline
+        env:
+          # Optional: add a SKYLINE_TOKEN secret (classic PAT, read:user) to
+          # include private contributions. Falls back to the workflow token.
+          GITHUB_TOKEN: ${{ secrets.SKYLINE_TOKEN || secrets.GITHUB_TOKEN }}
+        run: go run github.com/pinkpixel-dev/neon-skyline@latest -svg skyline.svg "${{ github.repository_owner }}"
+
+      - name: Publish to output branch
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir out && mv skyline.svg out/ && cd out
+          git init -q -b output
+          git add skyline.svg
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit -qm "Update neon skyline"
+          git push -qf "https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git" output
