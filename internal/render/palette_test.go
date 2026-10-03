@@ -8,8 +8,8 @@ import (
 var hexColor = regexp.MustCompile(`^#[0-9a-f]{6}$`)
 
 func TestThemesAreComplete(t *testing.T) {
-	if len(Themes) != 10 {
-		t.Errorf("got %d themes, want 10", len(Themes))
+	if len(Themes) != 12 {
+		t.Errorf("got %d themes, want 12", len(Themes))
 	}
 	seen := map[string]bool{}
 	for _, th := range Themes {

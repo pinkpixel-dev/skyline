@@ -1,6 +1,6 @@
 # Overview
 
-skyline is a small Go CLI that draws a GitHub contribution graph as an ASCII city, either in the terminal or as an animated SVG, in one of 10 color themes.
+skyline is a small Go CLI that draws a GitHub contribution graph as an ASCII city, either in the terminal or as an animated SVG, in one of 12 color themes.
 
 ## Flow
 

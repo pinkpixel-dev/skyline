@@ -1,6 +1,6 @@
 # skyline
 
-skyline turns your GitHub contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 10 color themes.
+skyline turns your GitHub contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 12 color themes.
 
 ![Skyline](https://raw.githubusercontent.com/sizzlebop/sizzlebop/output/skyline.svg)
 
@@ -66,9 +66,9 @@ Pick a palette with `-theme`:
 skyline -theme synthwave your-username
 ```
 
-There are 10 of them: `neon` (the default), `synthwave`, `matrix`, `amber`, `ice`, `sunset`, `toxic`, `vapor`, `crimson` and `mono`. Run `skyline -themes` to see a color swatch for each one right in your terminal.
+There are 12 of them: `neon` (the default), `synthwave`, `matrix`, `amber`, `ice`, `sunset`, `toxic`, `vapor`, `crimson`, `mono`, `prism` and `rainbow`. `prism` is a neon rainbow on a dark background, and `rainbow` is a classic rainbow on black. Run `skyline -themes` to see a color swatch for each one right in your terminal.
 
-![All 10 themes](assets/themes.png)
+![All the themes](assets/themes.png)
 
 ### Flags
 

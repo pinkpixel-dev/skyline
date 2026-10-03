@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0 - October 3, 2026
+
+### 🎨 Themes
+
+- Two new themes: `prism` (neon rainbow on dark) and `rainbow` (classic rainbow on black)
+- Every theme except `neon` and `synthwave` got darker backgrounds and more contrast between window levels, so lit windows stand out instead of blending into one shade
+- `matrix` now sits on near-black, `ice` mixes deep and light blues on dark gray, and `amber` borrows Ayu's orange, warm yellow and soft red
+- `sunset`, `toxic`, `vapor` and `crimson` now use a second hue in their windows (toxic got a purple accent, for example)
+
 ## 0.1.0 - October 3, 2026
 
 ### 🌃 Skyline
