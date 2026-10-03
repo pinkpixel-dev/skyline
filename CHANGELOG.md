@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 - October 3, 2026
+
+### 🏷️ Versioning
+
+- First stable release. Same code and features as 0.2.0, now tagged as 1.0.0
+- The themes preview image in the README now shows all 12 themes
+
 ## 0.2.0 - October 3, 2026
 
 ### 🎨 Themes
