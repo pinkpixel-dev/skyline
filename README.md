@@ -1,6 +1,6 @@
 # skyline
 
-skyline turns your GitHub contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 12 color themes.
+skyline turns your GitHub (or Gitea) contribution graph into an ASCII city. Every week of the year becomes a building, and every day you committed becomes a lit window. It comes with 12 color themes.
 
 ![Skyline](https://raw.githubusercontent.com/sizzlebop/sizzlebop/output/skyline.svg)
 
@@ -23,6 +23,7 @@ Stars and flickering windows come from a fixed hash, so the city looks the same 
 
 - Go 1.25 or newer
 - A GitHub token. skyline checks `GITHUB_TOKEN`, then `GH_TOKEN`, then falls back to `gh auth token`. If you already use the GitHub CLI, you don't need to do anything.
+- For Gitea, no token at all if the profile is public. See [Gitea and Forgejo](#gitea-and-forgejo).
 
 ## Install
 
@@ -58,6 +59,24 @@ To write an SVG instead of printing:
 skyline -svg skyline.svg your-username
 ```
 
+### Gitea and Forgejo
+
+To draw a city from a Gitea instance instead of GitHub, pass its base URL with `-gitea`:
+
+```bash
+skyline -gitea https://gitea.example.com your-username
+```
+
+Public heatmaps don't need a token. If your instance requires sign-in, set `GITEA_TOKEN` to an access token and skyline sends it along.
+
+A few things work a little differently than on GitHub:
+
+- Gitea doesn't hand out intensity levels the way GitHub does, so skyline works them out from your own year. Your busiest quarter of days gets the brightest windows.
+- Days are grouped in UTC, so a late-night commit can land on the next day.
+- Admins can turn the heatmap off with `ENABLE_USER_HEATMAP`. If it's off, you'll get a "not found" error even when the user exists.
+
+Forgejo (and Codeberg, which runs it) uses the same heatmap API, so it should work too, but I've only tested against gitea.com so far.
+
 ### Themes
 
 Pick a palette with `-theme`:
@@ -79,6 +98,7 @@ There are 12 of them: `neon` (the default), `synthwave`, `matrix`, `amber`, `ice
 | `-height` | `14` | Height of the tallest building, in rows |
 | `-weeks` | `53` | How many recent weeks to draw |
 | `-svg` | | Write an animated SVG to this path instead of printing to the terminal |
+| `-gitea` | | Read contributions from the Gitea or Forgejo instance at this base URL instead of GitHub |
 
 ## Putting it on your GitHub profile
 
@@ -120,6 +140,7 @@ go vet ./...
 The code is split into three pieces:
 
 - `internal/github` fetches the contribution calendar from the GraphQL API
+- `internal/gitea` fetches a Gitea heatmap and reshapes it into the same calendar
 - `internal/city` lays out the scene as a grid of cells (buildings, windows, stars, street, labels)
 - `internal/render` draws that grid as ANSI text or SVG, using one shared palette
 

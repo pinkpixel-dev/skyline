@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 - October 9, 2026
+
+### 🍵 Gitea
+
+- New `-gitea <base-url>` flag draws the city from a Gitea or Forgejo instance, including self-hosted ones
+- Public heatmaps work without a token. Set `GITEA_TOKEN` for instances that require sign-in
+- Window brightness levels are worked out from your own year's activity, since Gitea doesn't provide GitHub-style levels
+
 ## 1.0.0 - October 3, 2026
 
 ### 🏷️ Versioning

@@ -1,4 +1,4 @@
-// Command skyline draws a GitHub contribution graph as an ASCII city.
+// Command skyline draws a GitHub or Gitea contribution graph as an ASCII city.
 package main
 
 import (
@@ -12,6 +12,7 @@ import (
 	"charm.land/lipgloss/v2"
 
 	"github.com/pinkpixel-dev/skyline/internal/city"
+	"github.com/pinkpixel-dev/skyline/internal/gitea"
 	"github.com/pinkpixel-dev/skyline/internal/github"
 	"github.com/pinkpixel-dev/skyline/internal/render"
 )
@@ -22,8 +23,9 @@ func main() {
 	svgPath := flag.String("svg", "", "write an animated SVG to this path instead of printing")
 	themeName := flag.String("theme", render.Themes[0].Name, "color theme (see -themes)")
 	listThemes := flag.Bool("themes", false, "list the built-in themes and exit")
+	giteaURL := flag.String("gitea", "", "read contributions from the Gitea or Forgejo instance at this base URL")
 	flag.Usage = func() {
-		fmt.Fprintln(os.Stderr, "usage: skyline [flags] <github-username>")
+		fmt.Fprintln(os.Stderr, "usage: skyline [flags] <username>")
 		flag.PrintDefaults()
 	}
 	flag.Parse()
@@ -37,25 +39,21 @@ func main() {
 		os.Exit(2)
 	}
 
-	if err := run(flag.Arg(0), *themeName, *height, *weeks, *svgPath); err != nil {
+	if err := run(flag.Arg(0), *giteaURL, *themeName, *height, *weeks, *svgPath); err != nil {
 		fmt.Fprintln(os.Stderr, "skyline:", err)
 		os.Exit(1)
 	}
 }
 
-func run(login, themeName string, height, weeks int, svgPath string) error {
+func run(login, giteaURL, themeName string, height, weeks int, svgPath string) error {
 	theme, err := render.ThemeByName(themeName)
-	if err != nil {
-		return err
-	}
-	token, err := github.Token()
 	if err != nil {
 		return err
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
 
-	cal, err := github.Fetch(ctx, token, login)
+	cal, err := fetch(ctx, login, giteaURL)
 	if err != nil {
 		return err
 	}
@@ -70,6 +68,18 @@ func run(login, themeName string, height, weeks int, svgPath string) error {
 	}
 	fmt.Fprintln(os.Stderr, "wrote", svgPath)
 	return nil
+}
+
+// fetch reads the calendar from Gitea when a base URL is given, otherwise GitHub.
+func fetch(ctx context.Context, login, giteaURL string) (*github.Calendar, error) {
+	if giteaURL != "" {
+		return gitea.Fetch(ctx, giteaURL, gitea.Token(), login)
+	}
+	token, err := github.Token()
+	if err != nil {
+		return nil, err
+	}
+	return github.Fetch(ctx, token, login)
 }
 
 // themeList prints each theme name next to a swatch of its roof and window colors.
